@@ -83,7 +83,7 @@ def imprimirDenuncias(filtros = {}):
         valido = True
         # Filtros de fechas
         if "fecha" in filtros:
-            if filtros["fecha"] == "Ultimos 30min" and tiempoDesde(fecha) > 30:
+            if filtros["fecha"] == "Últimos 30min" and tiempoDesde(fecha) > 30:
                 valido = False
             if filtros["fecha"] == "Ultima hora" and tiempoDesde(fecha) > 60:
                 valido = False
@@ -103,6 +103,9 @@ def imprimirDenuncias(filtros = {}):
 
 # Registrar una nueva denuncia en el registro
 def registrarDenuncia(linea = ""):
+    # Se abre el archivo para añadir nuevas denuncias
+    escritor_registro = open(nombre_archivo, "a")
+
     # Pedir datos para almacenar denuncia
     print("Ingrese el tipo de denuncia")
     tipo = pedirOpcion(tipos_denuncia)
@@ -135,6 +138,9 @@ def registrarDenuncia(linea = ""):
     texto_denuncia = str(nueva_denuncia)
     escritor_registro.write(texto_denuncia.replace("'", '"'))
 
+    # Cierra el archivo para actualizar cambios
+    escritor_registro.close()
+
 
 #   FLUJO PROGRAMA
 if __name__ == "__main__":
@@ -145,11 +151,8 @@ if __name__ == "__main__":
     denuncias = eval(registro)
 
     lector_registro.close()
-
-    # Se abre el archivo para añadir nuevas denuncias
-    escritor_registro = open(nombre_archivo, "a")
-
     
+    # Comienzo del programa
     nombre = input("Ingrese su nombre =>")
 
     if nombre.upper() == "ADMIN":
@@ -157,7 +160,7 @@ if __name__ == "__main__":
         filtros = {}
         lineas_fil = ["Todas"]
         lineas_fil.extend(lineas)
-        fecha_fil = ["Todas", "Ultimos 30min", "Ultima hora"]
+        fecha_fil = ["Todas", "Últimos 30min", "Ultima hora"]
 
         opcion = 0
         while(opcion != 5):
@@ -187,7 +190,7 @@ if __name__ == "__main__":
         print("Ingrese la linea en la que se encuentra")
         linea = pedirOpcion(lineas)
         filtro = {
-            "fecha": "Ultimos 30min",
+            "fecha": "Últimos 30min",
             "linea": linea
         }
 
@@ -204,5 +207,3 @@ if __name__ == "__main__":
                 registrarDenuncia(linea)
             if opcion == 2:
                 imprimirDenuncias(filtro)
-    
-    escritor_registro.close()
